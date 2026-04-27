@@ -8,7 +8,7 @@ const videos = [
     description: 'A contemporary pop piano arrangement demonstrating technique and style.',
     src: '/videos/isaacvid1.mp4',
     category: 'Pop',
-    thumbnail: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=800&q=80',
+    thumbnail: 'images/thumbnail.png',
   },
   {
     id: 2,
@@ -16,15 +16,15 @@ const videos = [
     description: 'Expressive gospel piano improvisation showcasing creativity and musicality.',
     src: '/videos/isaacvid2.mp4',
     category: 'Gospel',
-    thumbnail: 'https://images.unsplash.com/photo-1552422535-c45813c61732?w=800&q=80',
+    thumbnail: 'images/thumbnail.png',
   },
   {
     id: 3,
-    title: 'Live Performance at The 1865',
-    description: 'Live solo piano performance recorded at The 1865, Southampton.',
+    title: 'Piano Covers',
+    description: 'Elegant piano renditions across genres, crafted to inspire.',
     src: '/videos/isaacvid1.mp4',
-    category: 'Live',
-    thumbnail: 'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=800&q=80',
+    category: 'Live Covers',
+    thumbnail: 'images/thumbnail.png',
   },
   {
     id: 4,
@@ -32,7 +32,7 @@ const videos = [
     description: 'Expressive instrumental piano cover showcasing interpretation and feeling.',
     src: '/videos/isaacvid2.mp4',
     category: 'Cover',
-    thumbnail: 'https://images.unsplash.com/photo-1507838153414-b4b713384a76?w=800&q=80',
+    thumbnail: 'images/thumbnail.png',
   },
   {
     id: 5,
@@ -40,7 +40,7 @@ const videos = [
     description: 'Collaborative band performance recorded at Brixton Jam, London.',
     src: '/videos/isaacvid1.mp4',
     category: 'Live',
-    thumbnail: 'https://images.unsplash.com/photo-1501612780327-45045538702b?w=800&q=80',
+    thumbnail: 'images/thumbnail.png',
   },
   {
     id: 6,
@@ -48,7 +48,7 @@ const videos = [
     description: 'Full playthrough demonstrating scales, chords and expressive playing.',
     src: '/videos/isaacvid2.mp4',
     category: 'Technique',
-    thumbnail: 'https://images.unsplash.com/photo-1466654754583-7c010b872da8?w=800&q=80',
+    thumbnail: 'images/thumbnail.png',
   },
 ]
 
