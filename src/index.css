@@ -1,0 +1,89 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { scroll-behavior: smooth; }
+
+  /* ── Dark theme (default) ── */
+  body {
+    @apply bg-dark-900 text-cream font-body antialiased;
+  }
+
+  /* ── Light theme ── */
+  html:not(.dark) body {
+    background-color: #faf8f4;
+    color: #1a1a1a;
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-display;
+  }
+
+  ::selection {
+    background-color: #c9953a33;
+    color: #c9953a;
+  }
+
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: #111111; }
+  ::-webkit-scrollbar-thumb { background: #c9953a; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: #f5d78e; }
+}
+
+@layer components {
+  .gold-text {
+    background: linear-gradient(135deg, #c9953a 0%, #f5d78e 50%, #c9953a 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .btn-primary {
+    @apply inline-block px-8 py-3 font-sans font-medium text-sm tracking-[0.3em] uppercase
+           bg-gold-500 text-dark-900 transition-all duration-300
+           hover:bg-gold-400 hover:shadow-[0_0_30px_rgba(201,149,58,0.4)]
+           active:scale-95;
+  }
+
+  .btn-outline {
+    @apply inline-block px-8 py-3 font-sans font-medium text-sm tracking-[0.3em] uppercase
+           border border-gold-500 text-gold-400 transition-all duration-300
+           hover:bg-gold-500/10 hover:shadow-[0_0_30px_rgba(201,149,58,0.2)]
+           active:scale-95;
+  }
+
+  .section-label {
+    @apply font-sans text-xs tracking-[0.3em] uppercase text-gold-400 mb-3;
+  }
+
+  .section-title {
+    @apply font-display text-4xl md:text-5xl leading-tight;
+  }
+
+  .divider-gold {
+    @apply w-16 h-px bg-gold-500 my-6;
+  }
+
+  .page-section {
+    @apply py-24 px-6 md:px-12 lg:px-24;
+  }
+
+  /* ── Light mode overrides ── */
+  html:not(.dark) .light-card {
+    background-color: #ffffff;
+    border-color: #c9953a22;
+  }
+
+  html:not(.dark) .light-bg {
+    background-color: #faf8f4;
+  }
+
+  html:not(.dark) .light-text {
+    color: #1a1a1a;
+  }
+
+  html:not(.dark) .light-text-muted {
+    color: #555555;
+  }
+}
