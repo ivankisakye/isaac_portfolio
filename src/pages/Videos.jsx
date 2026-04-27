@@ -1,21 +1,21 @@
 import { useRef, useState } from 'react'
-import { LuPlay, LuPause, LuVolume2, LuVolumeX } from 'react-icons/lu'
+import { LuPlay, LuPause, LuVolume2, LuVolumeX, LuX } from 'react-icons/lu'
 
 const videos = [
   {
     id: 1,
-    title: 'Gospel Piano Improvisation',
-    description: 'Expressive gospel piano improvisation showcasing creativity and musicality.',
+    title: 'Contemporary Pop Arrangement',
+    description: 'A contemporary pop piano arrangement demonstrating technique and style.',
     src: '/videos/isaacvid1.mp4',
-    category: 'Gospel',
-    thumbnail: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=800&q=80', // fixed
+    category: 'Pop',
+    thumbnail: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=800&q=80',
   },
   {
     id: 2,
-    title: 'Contemporary Pop Arrangement',
-    description: 'A contemporary pop piano arrangement demonstrating technique and style.',
+    title: 'Gospel Piano Improvisation',
+    description: 'Expressive gospel piano improvisation showcasing creativity and musicality.',
     src: '/videos/isaacvid2.mp4',
-    category: 'Pop',
+    category: 'Gospel',
     thumbnail: 'https://images.unsplash.com/photo-1552422535-c45813c61732?w=800&q=80',
   },
   {
@@ -52,7 +52,7 @@ const videos = [
   },
 ]
 
-function VideoCard({ title, description, src, category, thumbnail }) {
+function VideoCard({ title, description, src, category, thumbnail, onPlay }) {
   const videoRef = useRef(null)
   const [playing, setPlaying] = useState(false)
   const [muted, setMuted] = useState(false)
@@ -74,11 +74,15 @@ function VideoCard({ title, description, src, category, thumbnail }) {
     setMuted(!muted)
   }
 
+  function handlePlayClick() {
+    onPlay({ title, src, thumbnail, category })
+  }
+
   return (
     <div className="group bg-dark-800 border border-gold-500/10 hover:border-gold-500/30 transition-all duration-300 overflow-hidden">
 
       {/* Video area */}
-      <div className="relative aspect-video overflow-hidden bg-dark-900">
+      <div className="relative aspect-video overflow-hidden bg-dark-900 cursor-pointer" onClick={handlePlayClick}>
 
         {/* Thumbnail shown before play */}
         {!started && (
@@ -89,43 +93,29 @@ function VideoCard({ title, description, src, category, thumbnail }) {
           />
         )}
 
-        {/* Video element */}
+        {/* Video element (hidden, used for preview on card - now we use modal) */}
         <video
           ref={videoRef}
           src={src}
-          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${started ? 'opacity-100' : 'opacity-0'}`}
-          onEnded={() => setPlaying(false)}
+          className="hidden"
           playsInline
         />
 
         {/* Dark overlay */}
-        <div className={`absolute inset-0 transition-all duration-300 ${playing ? 'bg-transparent' : 'bg-dark-900/40'}`} />
+        <div className="absolute inset-0 bg-dark-900/60 transition-all duration-300 group-hover:bg-dark-900/40" />
 
-        {/* Play / Pause button center */}
-        <button
-          onClick={togglePlay}
-          className="absolute inset-0 flex items-center justify-center group/play"
-          aria-label={playing ? 'Pause' : 'Play'}
+        {/* Play button center */}
+        <div
+          className="absolute inset-0 flex items-center justify-center"
         >
           <div
-            className={`w-14 h-14 rounded-full border flex items-center justify-center transition-all duration-300
+            className="w-14 h-14 rounded-full border flex items-center justify-center transition-all duration-300
               border-gold-400/60 text-gold-400 bg-dark-900/50
-              group-hover/play:border-gold-400 group-hover/play:scale-110 ${playing ? 'opacity-0 group-hover/play:opacity-100' : 'opacity-100'}`}
+              group-hover:border-gold-400 group-hover:scale-110"
           >
-            {playing ? <LuPause size={18} /> : <LuPlay size={18} className="ml-1" />}
+            <LuPlay size={18} className="ml-1" />
           </div>
-        </button>
-
-        {/* Mute button bottom right */}
-        {started && (
-          <button
-            onClick={toggleMute}
-            className="absolute bottom-3 right-3 w-8 h-8 flex items-center justify-center border border-gold-500/30 text-gold-400/70 hover:text-gold-400 hover:border-gold-500/60 transition-all duration-300 bg-dark-900/60"
-            aria-label={muted ? 'Unmute' : 'Mute'}
-          >
-            {muted ? <LuVolumeX size={13} /> : <LuVolume2 size={13} />}
-          </button>
-        )}
+        </div>
 
         {/* Category badge */}
         <div className="absolute top-3 left-3 bg-dark-900/70 border border-gold-500/20 px-3 py-1">
@@ -144,7 +134,101 @@ function VideoCard({ title, description, src, category, thumbnail }) {
   )
 }
 
+// Modal component for full-screen video playback
+function VideoModal({ video, onClose }) {
+  const videoRef = useRef(null)
+  const [playing, setPlaying] = useState(true)
+  const [muted, setMuted] = useState(false)
+
+  function togglePlay() {
+    if (videoRef.current.paused) {
+      videoRef.current.play()
+      setPlaying(true)
+    } else {
+      videoRef.current.pause()
+      setPlaying(false)
+    }
+  }
+
+  function toggleMute() {
+    videoRef.current.muted = !videoRef.current.muted
+    setMuted(!muted)
+  }
+
+  return (
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-md animate-in fade-in duration-300"
+      onClick={onClose}
+    >
+      {/* Close button */}
+      <button
+        onClick={onClose}
+        className="absolute top-6 right-6 z-10 w-10 h-10 rounded-full border border-gold-500/30 text-gold-400/70 hover:text-gold-400 hover:border-gold-500/60 transition-all duration-300 bg-black/50 flex items-center justify-center"
+        aria-label="Close video"
+      >
+        <LuX size={20} />
+      </button>
+
+      {/* Video container - wide but elegant */}
+      <div 
+        className="relative w-full max-w-6xl mx-4 animate-in zoom-in-95 duration-300"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Video wrapper with elegant aspect ratio (16:9 but slightly wider feel) */}
+        <div className="relative rounded-lg overflow-hidden shadow-2xl border border-gold-500/20 bg-black">
+          <div className="relative" style={{ paddingBottom: '56.25%' }}>
+            <video
+              ref={videoRef}
+              src={video.src}
+              className="absolute inset-0 w-full h-full object-contain"
+              autoPlay
+              onEnded={() => setPlaying(false)}
+              playsInline
+            />
+          </div>
+
+          {/* Custom controls overlay - minimal and elegant */}
+          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 flex items-center gap-4 opacity-0 hover:opacity-100 transition-opacity duration-300">
+            <button
+              onClick={togglePlay}
+              className="w-10 h-10 rounded-full border border-gold-500/40 text-gold-400 hover:bg-gold-500/20 hover:border-gold-400 transition-all duration-300 flex items-center justify-center"
+              aria-label={playing ? 'Pause' : 'Play'}
+            >
+              {playing ? <LuPause size={16} /> : <LuPlay size={16} className="ml-0.5" />}
+            </button>
+            
+            <button
+              onClick={toggleMute}
+              className="w-10 h-10 rounded-full border border-gold-500/40 text-gold-400 hover:bg-gold-500/20 hover:border-gold-400 transition-all duration-300 flex items-center justify-center"
+              aria-label={muted ? 'Unmute' : 'Mute'}
+            >
+              {muted ? <LuVolumeX size={16} /> : <LuVolume2 size={16} />}
+            </button>
+
+            <div className="flex-1" />
+
+            {/* Video title */}
+            <div className="text-cream/80 font-display text-sm tracking-wide">
+              {video.title}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function Videos() {
+  const [activeVideo, setActiveVideo] = useState(null)
+
+  function handlePlayVideo(video) {
+    setActiveVideo(video)
+  }
+
+  function handleCloseModal() {
+    setActiveVideo(null)
+  }
+
   return (
     <>
       {/* ── Page Hero ────────────────────────────────────── */}
@@ -164,7 +248,7 @@ export default function Videos() {
       <section className="page-section pt-0 max-w-7xl mx-auto">
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {videos.map((video) => (
-            <VideoCard key={video.id} {...video} />
+            <VideoCard key={video.id} {...video} onPlay={handlePlayVideo} />
           ))}
         </div>
       </section>
@@ -189,6 +273,11 @@ export default function Videos() {
           for the latest performance clips and updates.
         </p>
       </section>
+
+      {/* Video Modal */}
+      {activeVideo && (
+        <VideoModal video={activeVideo} onClose={handleCloseModal} />
+      )}
     </>
   )
 }
