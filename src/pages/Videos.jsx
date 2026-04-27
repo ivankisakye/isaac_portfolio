@@ -22,7 +22,7 @@ const videos = [
     id: 3,
     title: 'Piano Covers',
     description: 'Elegant piano renditions across genres, crafted to inspire.',
-    src: '/videos/isaacvid1.mp4',
+    src: '/videos/isaacvid3.mp4',
     category: 'Live Covers',
     thumbnail: 'images/thumbnail.png',
   },
